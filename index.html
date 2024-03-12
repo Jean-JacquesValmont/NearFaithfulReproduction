@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<link href="./src/output.css" type="text/css" rel="stylesheet">
+    <title>Reproduction presque fidèle</title>
 </head>
 <body>
-    Test
+    <div class="flex">
+        <canvas id="canvas" class="border-2 border-black" width="600" height="400"></canvas>
+        <div class="p-2">
+            <button id="increase" class="p-2 border-2 border-black">Increase size</button>
+            <button id="decrease" class="p-2 border-2 border-black">Decrease size</button>
+        </div>
+    </div>
+
     <script src="../script.js"></script>
 </body>
 </html>
