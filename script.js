@@ -3,17 +3,20 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 const brushSizeSelect = document.getElementById('brushSizeSelect');
+const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
 
 const clearAll = document.getElementById('clearAll');
 
 // Variables initialisation
 let isDrawing = false;
+let tool = "brush"
 let lineWidthSize = 10
 const brushShape = 'round'
 
 let brushColor = '#000'
 brushSizeSelect.value = "10";
+toolSelect.value = "brush"
 colorSelect.style.backgroundColor = '#000'
 
 
@@ -25,16 +28,22 @@ const colorButtons = colors.map(color => document.getElementById(`color${colors.
 function draw(e) {
     if (!isDrawing) return;
 
-    // Paramètres du trait
-    context.lineWidth = lineWidthSize ;
-    context.lineCap = brushShape;
-    context.strokeStyle = brushColor; // Couleur du trait
+    if (tool == "brush"){
+        // Paramètres du trait
+        context.lineWidth = lineWidthSize ;
+        context.lineCap = brushShape;
+        context.strokeStyle = brushColor; // Couleur du trait
 
-    // Dessiner
-    context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-    context.stroke();
-    context.beginPath();
-    context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        // Dessiner
+        context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
+    else if(tool == "paintBucket"){
+        context.fillStyle = brushColor;
+        context.fillRect(0, 0, canvas.width, canvas.height)
+    }
 }
 
 // Événement pour commencer le dessin
@@ -57,13 +66,16 @@ brushSizeSelect.addEventListener("change", () => {
     lineWidthSize = brushSizeSelect.value
 })
 
+// Événement pour définir la taille du pinceau
+toolSelect.addEventListener("change", () => {
+    tool = toolSelect.value
+})
+
 // Événement pour la couleur du pinceau
 colorButtons.forEach(button => {
     button.addEventListener("click", () => {
         for(let i = 0; i <= colors.length; i++){
-            console.log(i)
             if (button.id == "color" + i){
-                console.log("Color change")
                 brushColor = colors[i];
                 colorSelect.style.backgroundColor = colors[i]
                 break
