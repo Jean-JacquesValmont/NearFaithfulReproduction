@@ -3,22 +3,23 @@ const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
 const brushSizeSelect = document.getElementById('brushSizeSelect');
-
-const color1 = document.getElementById('color1');
-const color2 = document.getElementById('color2');
-const color3 = document.getElementById('color3');
-const color4 = document.getElementById('color4');
-const color5 = document.getElementById('color5');
-const color6 = document.getElementById('color6');
+const colorSelect = document.getElementById('colorSelect');
 
 const clearAll = document.getElementById('clearAll');
 
-// Variables pour le suivi de l'état du dessin
+// Variables initialisation
 let isDrawing = false;
 let lineWidthSize = 10
 const brushShape = 'round'
+
 let brushColor = '#000'
 brushSizeSelect.value = "10";
+colorSelect.style.backgroundColor = '#000'
+
+
+const colors = ['#FFFFFF', ' #d1d5db', '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9', '#93c5fd', '#d8b4fe', '#f9a8d4',
+ '#000', '#374151', '#b91c1c', '#c2410c ', '#a16207', '#15803d',  '#0e7490',  '#1d4ed8', '#7e22ce', '#be185d'];
+const colorButtons = colors.map(color => document.getElementById(`color${colors.indexOf(color)}`));
 
 // Fonction de dessin
 function draw(e) {
@@ -51,37 +52,27 @@ canvas.addEventListener('mouseup', () => {
 // Événement pour dessiner
 canvas.addEventListener('mousemove', draw);
 
-// Événements pour définir la taille du pinceau
+// Événement pour définir la taille du pinceau
 brushSizeSelect.addEventListener("change", () => {
     lineWidthSize = brushSizeSelect.value
 })
 
-// Événements pour définir la couleur du pinceau
-color1.addEventListener("click", () => {
-    brushColor = '#000'
-})
+// Événement pour la couleur du pinceau
+colorButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        for(let i = 0; i <= colors.length; i++){
+            console.log(i)
+            if (button.id == "color" + i){
+                console.log("Color change")
+                brushColor = colors[i];
+                colorSelect.style.backgroundColor = colors[i]
+                break
+            }
+        }
+    });
+});
 
-color2.addEventListener("click", () => {
-    brushColor = "#FFFFFF"
-})
-
-color3.addEventListener("click", () => {
-    brushColor = '#697280'
-})
-
-color4.addEventListener("click", () => {
-    brushColor = '#EE4343'
-})
-
-color5.addEventListener("click", () => {
-    brushColor = '#3A82F5'
-})
-
-color6.addEventListener("click", () => {
-    brushColor = '#21C35E'
-})
-
-// Événements pour définir différentes actions
+// Événement pour définir différentes actions
 clearAll.addEventListener("click", (e) => {
     context.clearRect(0, 0, canvas.width, canvas.height)
 })
