@@ -9,13 +9,15 @@
 <body>
     <canvas id="canvas" class="border-2 border-black" width="600" height="400"></canvas>
     <div class="flex">
-        <div class="p-2">
-            <p>Taille du pinceau (en pixel):</p>
-            <button id="brushSize1" class="p-2 border-2 border-black">1</button>
-            <button id="brushSize2" class="p-2 border-2 border-black">3</button>
-            <button id="brushSize3" class="p-2 border-2 border-black">5</button>
-            <button id="brushSize4" class="p-2 border-2 border-black">7</button>
-            <button id="brushSize5" class="p-2 border-2 border-black">9</button>
+        <div class="flex flex-col p-2">
+            <p>Taille du pinceau:</p>
+            <select id="brushSizeSelect" class="p-2 border-2 border-black">
+                <option value="1">Très petit</option>
+                <option value="5">Petit</option>
+                <option value="10" selected>Moyen</option>
+                <option value="15">Grand</option>
+                <option value="20">Très grand</option>
+            </select>
         </div>
         <div class="p-2">
             <p>Couleur:</p>

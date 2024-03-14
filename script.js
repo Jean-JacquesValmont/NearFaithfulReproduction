@@ -2,11 +2,7 @@
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 
-const brushSize1 = document.getElementById('brushSize1');
-const brushSize2 = document.getElementById('brushSize2');
-const brushSize3 = document.getElementById('brushSize3');
-const brushSize4 = document.getElementById('brushSize4');
-const brushSize5 = document.getElementById('brushSize5');
+const brushSizeSelect = document.getElementById('brushSizeSelect');
 
 const color1 = document.getElementById('color1');
 const color2 = document.getElementById('color2');
@@ -19,15 +15,16 @@ const clearAll = document.getElementById('clearAll');
 
 // Variables pour le suivi de l'état du dessin
 let isDrawing = false;
-let lineWidthSize = 5
+let lineWidthSize = 10
 const brushShape = 'round'
 let brushColor = '#000'
+brushSizeSelect.value = "10";
 
 // Fonction de dessin
 function draw(e) {
     if (!isDrawing) return;
 
-    // Paramètres du trait (à adapter selon les besoins)
+    // Paramètres du trait
     context.lineWidth = lineWidthSize ;
     context.lineCap = brushShape;
     context.strokeStyle = brushColor; // Couleur du trait
@@ -55,24 +52,8 @@ canvas.addEventListener('mouseup', () => {
 canvas.addEventListener('mousemove', draw);
 
 // Événements pour définir la taille du pinceau
-brushSize1.addEventListener("click", () => {
-    lineWidthSize = 1
-})
-
-brushSize2.addEventListener("click", () => {
-    lineWidthSize = 3
-})
-
-brushSize3.addEventListener("click", () => {
-    lineWidthSize = 5
-})
-
-brushSize4.addEventListener("click", () => {
-    lineWidthSize = 7
-})
-
-brushSize5.addEventListener("click", () => {
-    lineWidthSize = 9
+brushSizeSelect.addEventListener("change", () => {
+    lineWidthSize = brushSizeSelect.value
 })
 
 // Événements pour définir la couleur du pinceau
