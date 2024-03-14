@@ -1,12 +1,27 @@
 // Récupérer le canevas et le contexte 2D
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
-const increased = document.getElementById('increase');
-const decreased = document.getElementById('decrease');
+
+const brushSize1 = document.getElementById('brushSize1');
+const brushSize2 = document.getElementById('brushSize2');
+const brushSize3 = document.getElementById('brushSize3');
+const brushSize4 = document.getElementById('brushSize4');
+const brushSize5 = document.getElementById('brushSize5');
+
+const color1 = document.getElementById('color1');
+const color2 = document.getElementById('color2');
+const color3 = document.getElementById('color3');
+const color4 = document.getElementById('color4');
+const color5 = document.getElementById('color5');
+const color6 = document.getElementById('color6');
+
+const clearAll = document.getElementById('clearAll');
 
 // Variables pour le suivi de l'état du dessin
 let isDrawing = false;
-let lineWidthSize = 1
+let lineWidthSize = 5
+const brushShape = 'round'
+let brushColor = '#000'
 
 // Fonction de dessin
 function draw(e) {
@@ -14,8 +29,8 @@ function draw(e) {
 
     // Paramètres du trait (à adapter selon les besoins)
     context.lineWidth = lineWidthSize ;
-    context.lineCap = 'round';
-    context.strokeStyle = '#000'; // Couleur du trait
+    context.lineCap = brushShape;
+    context.strokeStyle = brushColor; // Couleur du trait
 
     // Dessiner
     context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
@@ -39,12 +54,53 @@ canvas.addEventListener('mouseup', () => {
 // Événement pour dessiner
 canvas.addEventListener('mousemove', draw);
 
-// Événement pour agrandir la taille du pinceau
-increased.addEventListener("click", () => {
-    lineWidthSize += 2
+// Événements pour définir la taille du pinceau
+brushSize1.addEventListener("click", () => {
+    lineWidthSize = 1
 })
 
-// Événement pour diminuer la taille du pinceau
-decreased.addEventListener("click", () => {
-    lineWidthSize >= 1 ? lineWidthSize -= 2 : null
+brushSize2.addEventListener("click", () => {
+    lineWidthSize = 3
+})
+
+brushSize3.addEventListener("click", () => {
+    lineWidthSize = 5
+})
+
+brushSize4.addEventListener("click", () => {
+    lineWidthSize = 7
+})
+
+brushSize5.addEventListener("click", () => {
+    lineWidthSize = 9
+})
+
+// Événements pour définir la couleur du pinceau
+color1.addEventListener("click", () => {
+    brushColor = '#000'
+})
+
+color2.addEventListener("click", () => {
+    brushColor = "#FFFFFF"
+})
+
+color3.addEventListener("click", () => {
+    brushColor = '#697280'
+})
+
+color4.addEventListener("click", () => {
+    brushColor = '#EE4343'
+})
+
+color5.addEventListener("click", () => {
+    brushColor = '#3A82F5'
+})
+
+color6.addEventListener("click", () => {
+    brushColor = '#21C35E'
+})
+
+// Événements pour définir différentes actions
+clearAll.addEventListener("click", (e) => {
+    context.clearRect(0, 0, canvas.width, canvas.height)
 })

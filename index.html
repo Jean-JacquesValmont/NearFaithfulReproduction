@@ -7,11 +7,28 @@
     <title>Reproduction presque fidèle</title>
 </head>
 <body>
+    <canvas id="canvas" class="border-2 border-black" width="600" height="400"></canvas>
     <div class="flex">
-        <canvas id="canvas" class="border-2 border-black" width="600" height="400"></canvas>
         <div class="p-2">
-            <button id="increase" class="p-2 border-2 border-black">Increase size</button>
-            <button id="decrease" class="p-2 border-2 border-black">Decrease size</button>
+            <p>Taille du pinceau (en pixel):</p>
+            <button id="brushSize1" class="p-2 border-2 border-black">1</button>
+            <button id="brushSize2" class="p-2 border-2 border-black">3</button>
+            <button id="brushSize3" class="p-2 border-2 border-black">5</button>
+            <button id="brushSize4" class="p-2 border-2 border-black">7</button>
+            <button id="brushSize5" class="p-2 border-2 border-black">9</button>
+        </div>
+        <div class="p-2">
+            <p>Couleur:</p>
+            <button id="color1" class="bg-black text-white p-2 border-2 border-black">black</button>
+            <button id="color2" class="bg-white p-2 border-2 border-black">white</button>
+            <button id="color3" class="bg-gray-500 p-2 border-2 border-black">gray</button>
+            <button id="color4" class="bg-red-500 p-2 border-2 border-black">red</button>
+            <button id="color5" class="bg-blue-500 p-2 border-2 border-black">blue</button>
+            <button id="color6" class="bg-green-500 p-2 border-2 border-black">green</button>
+        </div>
+        <div class="p-2">
+            <p>Action:</p>
+            <button id="clearAll" class="p-2 border-2 border-black">Tout effacer</button>
         </div>
     </div>
 
