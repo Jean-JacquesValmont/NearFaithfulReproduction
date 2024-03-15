@@ -5,8 +5,9 @@ const context = canvas.getContext('2d');
 const brushSizeSelect = document.getElementById('brushSizeSelect');
 const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
-
 const clearAll = document.getElementById('clearAll');
+
+const randomImage = document.getElementById('randomImage');
 
 // Variables initialisation
 let isDrawing = false;
@@ -88,3 +89,38 @@ colorButtons.forEach(button => {
 clearAll.addEventListener("click", (e) => {
     context.clearRect(0, 0, canvas.width, canvas.height)
 })
+
+// Pour récupérer une image
+async function fetchImage() {
+    try {
+        const apiKey = '1rIW4mEHWJeRPQR1vGtU+g==a0KWLUCB8HcKGCKs';
+
+        // Faire la requête à l'API
+        const response = await fetch(`https://api.api-ninjas.com/v1/randomimage`, {
+            method: 'GET',
+            headers: {
+                'X-Api-Key': apiKey,
+                'Accept': 'image/jpg'
+            }
+        });
+
+        // Vérifier si la réponse est réussie (status code 200)
+        if (!response.ok) {
+            throw new Error('La requête a échoué : ' + response.status);
+        }
+
+        // Convertir la réponse en blob (image)
+        const imageBlob = await response.blob();
+
+        // Création d'une URL local avec le imageBlob récupéré
+        const imageUrl = URL.createObjectURL(imageBlob);
+
+        randomImage.src = imageUrl;
+
+    } catch (error) {
+        console.error('Une erreur s\'est produite lors de la récupération de l\'image :', error);
+    }
+}
+
+// Appeler la fonction pour récupérer l'image
+fetchImage();
