@@ -10,8 +10,6 @@ const colorSelect = document.getElementById('colorSelect');
 const clearAll = document.getElementById('clearAll');
 const compareImage = document.getElementById('compareImage');
 
-const colorPicker = document.getElementById('colorPicker');
-
 // Variables initialisation
 let isDrawing = false;
 let tool = "brush"
@@ -89,10 +87,6 @@ colorButtons.forEach(button => {
     });
 });
 
-colorPicker.addEventListener('change', function() {
-    brushColor = colorPicker.value;
-});
-
 // Événement pour définir différentes actions
 clearAll.addEventListener("click", (e) => {
     context.clearRect(0, 0, canvas.width, canvas.height)
@@ -136,7 +130,7 @@ async function fetchImage() {
 }
 
 // Appeler la fonction pour récupérer l'image
-// fetchImage();
+fetchImage();
 
 //Partie du code pour comparer les deux images
 // Comparer les pixels des deux images
@@ -155,11 +149,18 @@ compareImage.addEventListener("click", () => {
 
     let samePixels = 0;
 
+    const tolerance = 50;
+
     for (let i = 0; i < pixels1.length; i += 4) {
-        if (pixels1[i] === pixels2[i] &&
-            pixels1[i + 1] === pixels2[i + 1] &&
-            pixels1[i + 2] === pixels2[i + 2] &&
-            pixels1[i + 3] === pixels2[i + 3]) {
+        const diffRed = Math.abs(pixels1[i] - pixels2[i]);
+        const diffGreen = Math.abs(pixels1[i + 1] - pixels2[i + 1]);
+        const diffBlue = Math.abs(pixels1[i + 2] - pixels2[i + 2]);
+        const diffAlpha = Math.abs(pixels1[i + 3] - pixels2[i + 3]);
+
+        if (diffRed <= tolerance &&
+            diffGreen <= tolerance &&
+            diffBlue <= tolerance &&
+            diffAlpha <= tolerance) {
             samePixels++;
         }
     }
