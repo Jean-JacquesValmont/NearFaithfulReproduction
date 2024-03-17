@@ -1,13 +1,15 @@
 // Récupérer le canevas et le contexte 2D
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
+const canvasImage = document.getElementById('canvasImage');
+const contextImage = canvasImage.getContext('2d')
 
 const brushSizeSelect = document.getElementById('brushSizeSelect');
 const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
 const clearAll = document.getElementById('clearAll');
 
-const randomImage = document.getElementById('randomImage');
+
 
 // Variables initialisation
 let isDrawing = false;
@@ -20,6 +22,7 @@ brushSizeSelect.value = "10";
 toolSelect.value = "brush"
 colorSelect.style.backgroundColor = '#000'
 
+let randomImage = new Image()
 
 const colors = ['#FFFFFF', ' #d1d5db', '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9', '#93c5fd', '#d8b4fe', '#f9a8d4',
  '#000', '#374151', '#b91c1c', '#c2410c ', '#a16207', '#15803d',  '#0e7490',  '#1d4ed8', '#7e22ce', '#be185d'];
@@ -116,6 +119,11 @@ async function fetchImage() {
         const imageUrl = URL.createObjectURL(imageBlob);
 
         randomImage.src = imageUrl;
+
+        randomImage.onload = function() {
+            // Cette fonction est appelée lorsque l'image a été chargée
+            contextImage.drawImage(this,0,0); // this fait référence à l'objet courant (=image)
+          };
 
     } catch (error) {
         console.error('Une erreur s\'est produite lors de la récupération de l\'image :', error);
