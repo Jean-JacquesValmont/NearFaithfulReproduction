@@ -8,8 +8,9 @@ const brushSizeSelect = document.getElementById('brushSizeSelect');
 const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
 const clearAll = document.getElementById('clearAll');
+const compareImage = document.getElementById('compareImage');
 
-
+const colorPicker = document.getElementById('colorPicker');
 
 // Variables initialisation
 let isDrawing = false;
@@ -88,6 +89,10 @@ colorButtons.forEach(button => {
     });
 });
 
+colorPicker.addEventListener('change', function() {
+    brushColor = colorPicker.value;
+});
+
 // Événement pour définir différentes actions
 clearAll.addEventListener("click", (e) => {
     context.clearRect(0, 0, canvas.width, canvas.height)
@@ -131,4 +136,37 @@ async function fetchImage() {
 }
 
 // Appeler la fonction pour récupérer l'image
-fetchImage();
+// fetchImage();
+
+//Partie du code pour comparer les deux images
+// Comparer les pixels des deux images
+let imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
+let imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
+
+let pixels1 = imageData1.data;
+let pixels2 = imageData2.data;
+
+compareImage.addEventListener("click", () => {
+    imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
+    imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
+
+    pixels1 = imageData1.data;
+    pixels2 = imageData2.data;
+
+    let samePixels = 0;
+
+    for (let i = 0; i < pixels1.length; i += 4) {
+        if (pixels1[i] === pixels2[i] &&
+            pixels1[i + 1] === pixels2[i + 1] &&
+            pixels1[i + 2] === pixels2[i + 2] &&
+            pixels1[i + 3] === pixels2[i + 3]) {
+            samePixels++;
+        }
+    }
+
+    // Calculer le pourcentage de pixels identiques
+    const totalPixels = canvas.width * canvas.height;
+    const samePercentage = (samePixels / totalPixels) * 100;
+
+    console.log('Pourcentage de pixels identiques :', samePercentage.toFixed(2) + '%');
+})
