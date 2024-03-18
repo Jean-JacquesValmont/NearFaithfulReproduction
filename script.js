@@ -8,9 +8,12 @@ const brushSizeSelect = document.getElementById('brushSizeSelect');
 const toolSelect = document.getElementById('toolSelect');
 const colorSelect = document.getElementById('colorSelect');
 const clearAll = document.getElementById('clearAll');
+const undoButton = document.getElementById('undoButton');
+
 const compareImage = document.getElementById('compareImage');
 
-// Variables initialisation
+//// Variables initialisation
+//Pour le dessin
 let isDrawing = false;
 let tool = "brush"
 let lineWidthSize = 10
@@ -21,11 +24,22 @@ brushSizeSelect.value = "10";
 toolSelect.value = "brush"
 colorSelect.style.backgroundColor = '#000'
 
-let randomImage = new Image()
-
 const colors = ['#FFFFFF', ' #d1d5db', '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9', '#93c5fd', '#d8b4fe', '#f9a8d4',
  '#000', '#374151', '#b91c1c', '#c2410c ', '#a16207', '#15803d',  '#0e7490',  '#1d4ed8', '#7e22ce', '#be185d'];
 const colorButtons = colors.map(color => document.getElementById(`color${colors.indexOf(color)}`));
+
+//Pour la comparasion des images
+let randomImage = new Image()
+
+let imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
+let imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
+
+let pixels1 = imageData1.data;
+let pixels2 = imageData2.data;
+
+// Déclarer une liste pour stocker les actions de dessin
+const actions = [];
+
 
 // Fonction de dessin
 function draw(e) {
@@ -59,6 +73,7 @@ canvas.addEventListener('mousedown', (e) => {
 canvas.addEventListener('mouseup', () => {
     isDrawing = false;
     context.beginPath(); // Commencer un nouveau chemin après avoir relâché le bouton de la souris
+    recordAction();
 });
 
 // Événement pour dessiner
@@ -69,7 +84,7 @@ brushSizeSelect.addEventListener("change", () => {
     lineWidthSize = brushSizeSelect.value
 })
 
-// Événement pour définir la taille du pinceau
+// Événement pour définir l'outil utilisé
 toolSelect.addEventListener("change", () => {
     tool = toolSelect.value
 })
@@ -87,10 +102,44 @@ colorButtons.forEach(button => {
     });
 });
 
-// Événement pour définir différentes actions
+// Fonction pour effacer le canvas
+function clearCanvas() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Événement pour effacer tout le canvas
 clearAll.addEventListener("click", (e) => {
-    context.clearRect(0, 0, canvas.width, canvas.height)
+    clearCanvas()
 })
+
+// Fonction pour enregistrer une action de dessin
+function recordAction() {
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    actions.push(imageData);
+}
+
+// Fonction pour annuler la dernière action de dessin
+function undo() {
+    if (actions.length > 0) {
+        actions.pop(); // Supprimer la dernière action de la liste
+        redrawCanvas(); // Redessiner le canvas avec les actions restantes
+    }
+}
+
+// Fonction pour redessiner le canvas avec les actions restantes dans la liste
+function redrawCanvas() {
+    clearCanvas(); // Effacer le canvas
+
+    // Redessiner toutes les actions restantes
+    actions.forEach(imageData => {
+        context.putImageData(imageData, 0, 0);
+    });
+}
+
+// Événement pour annuler la dernière action de dessin (par exemple, lorsqu'un bouton "Annuler" est cliqué)
+undoButton.addEventListener('click', function() {
+    undo();
+});
 
 // Pour récupérer une image
 async function fetchImage() {
@@ -130,15 +179,11 @@ async function fetchImage() {
 }
 
 // Appeler la fonction pour récupérer l'image
-fetchImage();
+// fetchImage();
 
 //Partie du code pour comparer les deux images
 // Comparer les pixels des deux images
-let imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
-let imageData2 = contextImage.getImageData(0, 0, canvasImage.width, canvasImage.height);
 
-let pixels1 = imageData1.data;
-let pixels2 = imageData2.data;
 
 compareImage.addEventListener("click", () => {
     imageData1 = context.getImageData(0, 0, canvas.width, canvas.height);
