@@ -61,6 +61,17 @@ function draw(e) {
         context.fillStyle = brushColor;
         context.fillRect(0, 0, canvas.width, canvas.height)
     }
+    else if(tool == "eraser"){
+        context.lineWidth = lineWidthSize ;
+        context.lineCap = brushShape;
+        context.strokeStyle = '#FFFFFF';
+
+        // Effacer avec la gomme
+        context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
 }
 
 // Événement pour commencer le dessin
