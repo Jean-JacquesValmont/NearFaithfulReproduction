@@ -59,6 +59,7 @@ function draw(e) {
     }
     else if(tool == "paintBucket"){
         paintBucket(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, brushColor)
+
     }
     else if(tool == "eraser"){
         context.lineWidth = lineWidthSize ;
@@ -256,6 +257,150 @@ function setPixelColor(x, y, color) {
     context.putImageData(imageData, x, y);
 }
 
+function fillHorizontal(x, y, canvas, newColorRGBA, direction) {
+    if(direction == 1){
+        for(let i = 1; i < canvas.width - x  ; i++){
+        let pixelColor = getPixelColor(x + i*direction, y)
+
+        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+            break;
+        }
+        setPixelColor(x + i*direction, y, newColorRGBA)
+
+        fillHorizontal2(x, y, canvas, newColorRGBA, direction, i, 1, direction)
+        fillHorizontal2(x, y, canvas, newColorRGBA, direction, i, -1, direction)
+        }
+    }
+    else if(direction == -1){
+        for(let i = 1; i < x ; i++){
+            let pixelColor = getPixelColor(x + i*direction, y)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x + i*direction, y, newColorRGBA)
+    
+            fillHorizontal2(x, y, canvas, newColorRGBA, direction, i, 1, direction)
+            fillHorizontal2(x, y, canvas, newColorRGBA, direction, i, -1, direction)
+        }
+    }
+}
+
+function fillHorizontal2(x, y, canvas, newColorRGBA, direction, i, direction2, direction3) {
+    if(direction2 == 1){
+        for(let j = 1; j < canvas.height - y ; j++){
+            let pixelColor = getPixelColor(x + i*direction, y + j*direction2)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x + i*direction, y + j*direction2, newColorRGBA)
+    
+            fillHorizontal3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3)
+        }
+    }
+    else if(direction2 == -1){
+        for(let j = 1; j < y ; j++){
+            let pixelColor = getPixelColor(x + i*direction, y + j*direction2)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x + i*direction, y + j*direction2, newColorRGBA)
+    
+            fillHorizontal3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3)
+        }
+    }
+}
+
+function fillHorizontal3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3) {
+    for(let k = 1; k < canvas.width - x + i*direction ; k++){
+        let pixelColor = getPixelColor(x + i*direction + k*direction3, y + j*direction2)
+
+        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+            break;
+        }
+        setPixelColor(x + i*direction + k*direction3, y + j*direction2, newColorRGBA)
+    }
+}
+
+function fillVertical(x, y, canvas, newColorRGBA, direction) {
+    if(direction == 1){
+        for(let i = 1; i < canvas.height - y ; i++){
+            let pixelColor = getPixelColor(x, y + i*direction)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x, y + i*direction, newColorRGBA)
+    
+            fillVertical2(x, y, canvas, newColorRGBA, direction, i, 1, direction)
+            fillVertical2(x, y, canvas, newColorRGBA, direction, i, -1, direction)
+        }
+    }
+    else if(direction == -1){
+        for(let i = 1; i < y ; i++){
+            let pixelColor = getPixelColor(x, y + i*direction)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x, y + i*direction, newColorRGBA)
+    
+            fillVertical2(x, y, canvas, newColorRGBA, direction, i, 1, direction)
+            fillVertical2(x, y, canvas, newColorRGBA, direction, i, -1, direction)
+        }
+    }
+}
+
+function fillVertical2(x, y, canvas, newColorRGBA, direction, i, direction2, direction3) {
+    if(direction2 == 1){
+        for(let j = 1; j < canvas.width - x ; j++){
+            let pixelColor = getPixelColor(x + j*direction2, y + i*direction)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x + j*direction2, y + i*direction, newColorRGBA)
+    
+            fillVertical3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3)
+        }
+    }
+    else if(direction2 == -1){
+        for(let j = 1; j < x ; j++){
+            let pixelColor = getPixelColor(x + j*direction2, y + i*direction)
+    
+            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+                break;
+            }
+            setPixelColor(x + j*direction2, y + i*direction, newColorRGBA)
+    
+            fillVertical3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3)
+        }
+    } 
+}
+
+function fillVertical3(x, y, canvas, newColorRGBA, direction, i, direction2, j, direction3) {
+    for(let k = 1; k < canvas.height - y + i*direction ; k++){
+        let pixelColor = getPixelColor(x + j*direction2, y + i*direction + k*direction3)
+
+        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
+            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
+            break;
+        }
+        setPixelColor(x + j*direction2, y + i*direction + k*direction3, newColorRGBA)
+    }
+}
+
 // Fonction de pot de peinture (remplissage par diffusion)
 function paintBucket(x, y, newColor) {
     
@@ -272,181 +417,9 @@ function paintBucket(x, y, newColor) {
 
     setPixelColor(x, y, newColorRGBA)
 
-    //D'abord les diagonals
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x + i, y + i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x + i, y + i, newColorRGBA)
-    }
-
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x - i, y + i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x - i, y + i, newColorRGBA)
-    }
-
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x + i, y - i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x + i, y - i, newColorRGBA)
-    }
-
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x - i, y - i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x - i, y - i, newColorRGBA)
-    }
-
-    //Ensuite, les lignes
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x + i, y)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x + i, y, newColorRGBA)
-
-        for(let j = 1; j < canvas.height; j++){
-            pixelColor = getPixelColor(x + i, y + j)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x + i, y + j, newColorRGBA)
-        }
-
-        for(let j = 1; j < canvas.height; j++){
-            pixelColor = getPixelColor(x + i, y - j)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x + i, y - j, newColorRGBA)
-        }
-    }
-
-    for(let i = 1; i < canvas.width; i++){
-        let pixelColor = getPixelColor(x - i, y)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x - i, y, newColorRGBA)
-
-        for(let j = 1; j < canvas.height; j++){
-            pixelColor = getPixelColor(x - i, y + j)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x - i, y + j, newColorRGBA)
-        }
-
-        for(let j = 1; j < canvas.height; j++){
-            pixelColor = getPixelColor(x - i, y - j)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x - i, y - j, newColorRGBA)
-        }
-    }
-
-    for(let i = 1; i < canvas.height; i++){
-        let pixelColor = getPixelColor(x, y + i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x, y + i, newColorRGBA)
-
-        for(let j = 1; j < canvas.width; j++){
-            let pixelColor = getPixelColor(x + j, y + i)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x + j, y + i, newColorRGBA)
-        }
-
-        for(let j = 1; j < canvas.width; j++){
-            let pixelColor = getPixelColor(x - j, y + i)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x - j, y + i, newColorRGBA)
-        }
-    }
-
-    for(let i = 1; i < canvas.height; i++){
-        let pixelColor = getPixelColor(x, y - i)
-
-        if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-            && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-            break;
-        }
-        setPixelColor(x, y - i, newColorRGBA)
-
-        for(let j = 1; j < canvas.width; j++){
-            let pixelColor = getPixelColor(x + j, y - i)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x + j, y - i, newColorRGBA)
-        }
-
-        for(let j = 1; j < canvas.width; j++){
-            let pixelColor = getPixelColor(x - j, y - i)
-    
-            if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-                && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-                break;
-            }
-            setPixelColor(x - j, y - i, newColorRGBA)
-        }
-    }
-
-   
-    // for(let i = 1; i < canvas.width; i++){
-    //     for(let j = 1; j < canvas.height; j++){
-
-    //     let pixelColor = getPixelColor(x + i, y + j)
-
-    //     if (pixelColor[0] === newColorRGBA[0] && pixelColor[1] === newColorRGBA[1]
-    //         && pixelColor[2] === newColorRGBA[2] && pixelColor[3] === newColorRGBA[3]) {
-    //         break;
-    //     }
-    //     setPixelColor(x + i, y + j, newColorRGBA)
-    //     }
-    // }
-
+    fillHorizontal(x, y, canvas, newColorRGBA, 1); // fill to the right
+    fillHorizontal(x, y, canvas, newColorRGBA, -1); // fill to the left
+    fillVertical(x, y, canvas, newColorRGBA, -1); // fill to the Top
+    fillVertical(x, y, canvas, newColorRGBA, 1); // fill to the bottom
     
 }
