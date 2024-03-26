@@ -11,6 +11,9 @@ const clearAll = document.getElementById('clearAll');
 const undoButton = document.getElementById('undoButton');
 
 const compareImage = document.getElementById('compareImage');
+const samePixelText = document.getElementById("samePixelText")
+const toleranceSelect = document.getElementById('toleranceSelect');
+
 
 //// Variables initialisation
 //Pour le dessin
@@ -41,6 +44,8 @@ let pixels2 = imageData2.data;
 const actions = [];
 
 
+let tolerance = 50;
+
 // Fonction de dessin
 function draw(e) {
     if (!isDrawing) return;
@@ -58,7 +63,9 @@ function draw(e) {
         context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
     }
     else if(tool == "paintBucket"){
-        paintBucket(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, brushColor)
+        // paintBucket(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, brushColor)
+        context.fillStyle = brushColor
+        context.fillRect(0, 0, canvas.width, canvas.height)
 
     }
     else if(tool == "eraser"){
@@ -73,6 +80,16 @@ function draw(e) {
         context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
     }
 }
+
+// Ajoute un écouteur d'événements pour l'événement 'mouseenter'
+canvas.addEventListener('mouseenter', () => {
+    canvas.style.cursor = 'crosshair';
+});
+
+// Ajoute un écouteur d'événements pour l'événement 'mouseleave' pour réinitialiser le curseur lorsque tu sors du canvas
+canvas.addEventListener('mouseleave', () => {
+    canvas.style.cursor = 'default';
+});
 
 // Événement pour commencer le dessin
 canvas.addEventListener('mousedown', (e) => {
@@ -152,6 +169,11 @@ undoButton.addEventListener('click', function() {
     undo();
 });
 
+// Événement pour définir la taille du pinceau
+toleranceSelect.addEventListener("change", () => {
+    tolerance = toleranceSelect.value
+})
+
 // Pour récupérer une image
 async function fetchImage() {
     try {
@@ -203,18 +225,14 @@ compareImage.addEventListener("click", () => {
 
     let samePixels = 0;
 
-    const tolerance = 50;
-
     for (let i = 0; i < pixels1.length; i += 4) {
         const diffRed = Math.abs(pixels1[i] - pixels2[i]);
         const diffGreen = Math.abs(pixels1[i + 1] - pixels2[i + 1]);
         const diffBlue = Math.abs(pixels1[i + 2] - pixels2[i + 2]);
         const diffAlpha = Math.abs(pixels1[i + 3] - pixels2[i + 3]);
 
-        if (diffRed <= tolerance &&
-            diffGreen <= tolerance &&
-            diffBlue <= tolerance &&
-            diffAlpha <= tolerance) {
+        if (diffRed <= tolerance && diffGreen <= tolerance &&
+            diffBlue <= tolerance && diffAlpha <= tolerance) {
             samePixels++;
         }
     }
@@ -223,7 +241,8 @@ compareImage.addEventListener("click", () => {
     const totalPixels = canvas.width * canvas.height;
     const samePercentage = (samePixels / totalPixels) * 100;
 
-    console.log('Pourcentage de pixels identiques :', samePercentage.toFixed(2) + '%');
+    samePixelText.textContent = 'Pourcentage de pixels identiques: ' + samePercentage.toFixed(2) + '% ' + "Tolerance: " + tolerance
+    console.log('Pourcentage de pixels identiques: ', samePercentage.toFixed(2) + '%', "Tolerance: ", tolerance);
 })
 
 // Fonction pour obtenir la couleur d'un pixel aux coordonnées (x, y)
